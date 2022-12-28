@@ -4,11 +4,12 @@ Title: Useful Tools for Soffers
 Version: 0.1.0
 Author: Mads Fjeld Wold
 Maintainer: Mads Fjeld Wold <mads.wold@samforsk.no>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: Convenience functions for working with data that we Soffers often
+    encounter.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+RoxygenNote: 7.2.3
