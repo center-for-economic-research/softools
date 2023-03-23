@@ -4,10 +4,10 @@
 \alias{kmn_inndeling}
 \title{Get municipality classifications from SSB}
 \usage{
-kmn_inndeling(datoer)
+kmn_inndeling(aar)
 }
 \arguments{
-\item{datoer}{String for the required date of the classification. Format must be "yyyy-mm-dd". For an inverval, provide two dates as a vector. If blank, will default to today's date}
+\item{aar}{Integer vector with the years for which you want valid classifications.}
 }
 \value{
 A data frame with municipality name, number and year of validity
@@ -16,7 +16,7 @@ A data frame with municipality name, number and year of validity
 Get municipality classifications from SSB
 }
 \examples{
-kommunestruktur_2020 <- kmn_inndeling(datoer = "2020-01-01")
+kommunestruktur_2020 <- kmn_inndeling(aar = 2020)
 head(kommunestruktur_2020)
 
 }
