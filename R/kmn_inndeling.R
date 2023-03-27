@@ -24,11 +24,11 @@ kmn_inndeling <- function(aar) {
     .id = "aar"
   ) |>
     dplyr::rename(
-      "knavn" = .data$name,
-      "knr" = .data$code
+      "knavn" = "name",
+      "knr" = "code"
     ) |>
-    dplyr::select(.data$knavn, .data$knr, .data$aar) |>
-    dplyr::filter(.data$knr != "9999")
+    dplyr::select("knavn", "knr", "aar") |>
+    dplyr::filter("knr" != "9999")
 
   return(kmn_inndeling)
 
