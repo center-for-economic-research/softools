@@ -1,4 +1,4 @@
-#' Get municipality classifications from SSB
+#' Retrieve municipality classifications on a yearly basis from SSB
 #'
 #' @param aar Integer vector with the years for which you want valid classifications.
 #'
@@ -27,7 +27,8 @@ kmn_inndeling <- function(aar) {
       "knavn" = .data$name,
       "knr" = .data$code
     ) |>
-    dplyr::select(.data$knavn, .data$knr, .data$aar)
+    dplyr::select(.data$knavn, .data$knr, .data$aar) |>
+    dplyr::filter(.data$knr != "9999")
 
   return(kmn_inndeling)
 

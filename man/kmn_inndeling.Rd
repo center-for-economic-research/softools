@@ -2,7 +2,7 @@
 % Please edit documentation in R/kmn_inndeling.R
 \name{kmn_inndeling}
 \alias{kmn_inndeling}
-\title{Get municipality classifications from SSB}
+\title{Retrieve municipality classifications on a yearly basis from SSB}
 \usage{
 kmn_inndeling(aar)
 }
@@ -13,7 +13,7 @@ kmn_inndeling(aar)
 A data frame with municipality name, number and year of validity
 }
 \description{
-Get municipality classifications from SSB
+Retrieve municipality classifications on a yearly basis from SSB
 }
 \examples{
 kommunestruktur_2020 <- kmn_inndeling(aar = 2020)
