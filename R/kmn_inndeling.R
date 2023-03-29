@@ -28,7 +28,7 @@ kmn_inndeling <- function(aar) {
       "knr" = "code"
     ) |>
     dplyr::select("knavn", "knr", "aar") |>
-    dplyr::filter("knr" != "9999")
+    dplyr::filter(.data$knr != "9999")
 
   return(kmn_inndeling)
 
