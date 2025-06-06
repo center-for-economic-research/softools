@@ -2,5 +2,6 @@
 
 export(hello)
 export(kmn_inndeling)
+export(search_doffin)
 export(strsplit1)
 importFrom(rlang,.data)
