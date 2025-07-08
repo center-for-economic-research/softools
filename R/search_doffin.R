@@ -43,4 +43,6 @@ search_doffin <- function(...){
   if (httr2::resp_content_type(resp) != "application/json") {
     stop("Unexpected content type: ", httr2::resp_content_type(resp))
   }
+
+  return(resp)
 }
