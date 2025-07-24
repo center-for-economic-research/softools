@@ -40,38 +40,42 @@
 get_municipality_structure <- function(
     start_year = as.numeric(format(Sys.Date(), "%Y")),
     end_year = start_year) {
-  
+
   # Input validation
   if (!is.numeric(start_year) || !is.numeric(end_year)) {
     stop("Both start_year and end_year must be numeric.")
   }
-  
+
   if (length(start_year) != 1 || length(end_year) != 1) {
     stop("start_year and end_year must be single values.")
   }
-  
+
   if (start_year != round(start_year) || end_year != round(end_year)) {
     stop("start_year and end_year must be integers.")
   }
-  
+
   if (nchar(as.character(start_year)) != 4 || nchar(as.character(end_year)) != 4) {
     stop("Both start_year and end_year must be four-digit years.")
   }
-  
+
   if (start_year > end_year) {
     stop("start_year must be less than or equal to end_year.")
   }
-  
+
   # Set dates - municipality structure is always valid from January 1st of the year
   start_date <- paste0(start_year, "-01-01")
   end_date <- paste0(end_year, "-01-01")
-  
+
   periode <- c(start_date, end_date)
-  
+
   # Get classification of municipalities for the given period
   # Code 131 is the Statistics Norway code for municipality structure
   klass_muni <- klassR::get_klass(131, date = periode)
-  
+
+  # Fjern kode for uoppgitt kommune
+  klass_muni <- klass_muni |>
+    dplyr::filter(.data$code != "9999")
+
   # Validity dates returned from get_klass also cover names
   # We are only interested in codes because they identify the municipality
   # Changing codes signify change in unit
@@ -82,7 +86,7 @@ get_municipality_structure <- function(
   # Municipalities are treated as the same based on code
   # Retrieving data on population from Tjeldsund (1852) from table 06913
   # for the period 2001-2019 will return data for Tjeldsund (1909-2019)
-  
+
   # Get code and validity date
   # Find the first and last date for each code
   klass_muni <- klass_muni |>
@@ -93,6 +97,6 @@ get_municipality_structure <- function(
       .groups = "drop"
     ) |>
     dplyr::arrange(.data$code)
-  
+
   return(klass_muni)
 }
