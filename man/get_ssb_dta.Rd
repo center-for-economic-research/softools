@@ -24,3 +24,8 @@ En data.frame med data fra SSB.
 Denne funksjonen laster ned data fra Statistisk sentralbyrå (SSB) via deres API.
 Funksjonen er laget for å hente data for kommuner.
 }
+\details{
+Merk: Dersom argumentet `makeNAstatus = TRUE` benyttes i PxWebApiData::ApiData (som denne funksjonen gjør), forsøker funksjonen å legge til en kolonne `NAstatus` i datasettet. Dette er ikke garantert for alle tabeller: Om tabellen fra SSB ikke inneholder nødvendig metadata, vil kolonnen ikke bli lagt til. Funksjonen sjekker derfor alltid om `NAstatus` finnes før den brukes. Dersom kolonnen finnes, fjernes rader der `NAstatus == "."` (som vanligvis betyr at det ikke finnes observasjon for enheten). Hvis ikke, gis det en melding, og ingen rader fjernes basert på NAstatus.
+
+Dette betyr at tilstedeværelsen av `NAstatus`-kolonnen ikke er stabil, og brukere bør ikke forvente at den alltid er tilgjengelig i resultatet.
+}

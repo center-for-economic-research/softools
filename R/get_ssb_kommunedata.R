@@ -11,6 +11,11 @@
 #'
 #' @return En data.frame med data fra SSB.
 #'
+#' @details
+#' Merk: Dersom argumentet `makeNAstatus = TRUE` benyttes i PxWebApiData::ApiData (som denne funksjonen gjør), forsøker funksjonen å legge til en kolonne `NAstatus` i datasettet. Dette er ikke garantert for alle tabeller: Om tabellen fra SSB ikke inneholder nødvendig metadata, vil kolonnen ikke bli lagt til. Funksjonen sjekker derfor alltid om `NAstatus` finnes før den brukes. Dersom kolonnen finnes, fjernes rader der `NAstatus == "."` (som vanligvis betyr at det ikke finnes observasjon for enheten). Hvis ikke, gis det en melding, og ingen rader fjernes basert på NAstatus.
+#'
+#' Dette betyr at tilstedeværelsen av `NAstatus`-kolonnen ikke er stabil, og brukere bør ikke forvente at den alltid er tilgjengelig i resultatet.
+#'
 #' @importFrom httr GET content
 #' @importFrom PxWebApiData ApiData
 #' @export
@@ -71,25 +76,6 @@ get_ssb_dta <-
     kommunenummer_kolonne <-
       kommunenummer_kolonne[1]
 
-    # Antall unike kommunenummer i SSB tabell
-    length_kommuner_ssb <-
-      length(unique(ssb_tbl[, kommunenummer_kolonne]))
-
-    # Antall unike kommunenummer i gjeldende kommunestruktur
-    #length_kommuner_klass <- length(kommuner_gjeldende$code)
-
-    # Sjekk at alle kommuner er med
-    # if (length_kommuner_ssb != length_kommuner_klass) {
-    #   stop(paste(
-    #     "Ikke alle kommuner er med i tallene for",
-    #     aar,
-    #     "Fikk:",
-    #     length_kommuner_ssb,
-    #     ": forventet",
-    #     length_kommuner_klass
-    #   ))
-    # }
-    #
     # Fjern variabelen "ContentsCode"
     # metadata for statistikkvariabel
     ssb_tbl <-
@@ -106,7 +92,7 @@ get_ssb_dta <-
                   # ikke fjern "KOKkommuneregion0000", angir kommunenummer
                   grepl("KOKkommuneregion0000", colnames(ssb_tbl))]
 
-      # Fjern variabel "Tid", inneholder samme info som "år"
+# Fjern variabel "Tid", inneholder samme info som "aar"
       ssb_tbl <-
         ssb_tbl[, !grepl("Tid", colnames(ssb_tbl))]
     } else {
@@ -116,6 +102,26 @@ get_ssb_dta <-
         ssb_tbl[, !grepl("^[A-Z]", colnames(ssb_tbl))
                 # Don't remove Region, angir kommunenummer
                 | grepl("Region", colnames(ssb_tbl))]
+    }
+
+    # Fjern observasjoner der NAstatus er lik "."
+    # Statuskoder er ikke dokumentert i funksjon, men jeg antar at koden "." betyr
+    # at det ikke finnes observasjon for den enheten
+    # Alle kommuner som ikke var gyldige for det aktuelle aaret har denne koden
+    # Disse radene er ikke relevante for analyse og kan trygt fjernes.
+    # Andre koder for NAstatus (".." og ":") beholdes, da de representerer reelle manglende verdier
+    # (f.eks. ikke rapportert eller konfidensialitet), og kan vaere interessante for videre analyse.
+    # Se SSB API-dokumentasjon, side 12:
+    # https://www.ssb.no/api/pxwebapi/_/attachment/inline/019c05e0-35ad-4757-87a0-ba7fbf4a68e2:6c3de280a04d2ec9d9532c07f39a60131cbd2b09/Api_brukerveiledning.pdf
+
+    # Sjekk forst at det finnes en kolonne som heter "NAstatus"
+    # Fjern saa rader der NAstatus er lik "."
+    if ("NAstatus" %in% colnames(ssb_tbl)) {
+      ssb_tbl <- ssb_tbl[ssb_tbl$NAstatus != ".", ]
+    }
+    # Gi beskjed dersom det ikke finnes en kolonne som heter "NAstatus"
+    else {
+      message("Ingen kolonne 'NAstatus' funnet i tabellen. Ingen rader fjernet basert paa NAstatus = .")
     }
 
     return(ssb_tbl)
