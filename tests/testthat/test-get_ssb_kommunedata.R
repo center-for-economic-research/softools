@@ -1,3 +1,17 @@
+# Test for NAstatus column when present
+test_that("get_ssb_dta returns NAstatus column when expected", {
+  skip_on_cran()
+  # Fetch data for a table that includes NAstatus
+  ssb_data <- get_ssb_dta(
+    ssb_tbl_id = "04469",
+    aar = "2019",
+    statistikkvariabel = "Beboere",
+    kommuner = c("3011"), # Hvaler eksisterte ikke i 2019
+  )
+  expect_true("NAstatus" %in% colnames(ssb_data))
+  })
+
+
 test_that("get_ssb_dta returns a data.frame", {
   skip_on_cran() # Don't run on CRAN because it requires an internet connection
   ssb_data <- get_ssb_dta(
