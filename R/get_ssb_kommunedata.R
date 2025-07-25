@@ -115,9 +115,11 @@ get_ssb_dta <-
     # https://www.ssb.no/api/pxwebapi/_/attachment/inline/019c05e0-35ad-4757-87a0-ba7fbf4a68e2:6c3de280a04d2ec9d9532c07f39a60131cbd2b09/Api_brukerveiledning.pdf
 
     # Sjekk forst at det finnes en kolonne som heter "NAstatus"
-    # Fjern saa rader der NAstatus er lik "."
+    # Fjern saa rader der NAstatus er lik "." eller der NAstatus er NA
     if ("NAstatus" %in% colnames(ssb_tbl)) {
-      ssb_tbl <- ssb_tbl[ssb_tbl$NAstatus != ".", ]
+      # Fjern rader der NAstatus er lik "." eller der NAstatus er NA
+      ssb_tbl <- ssb_tbl[!(ssb_tbl$NAstatus == "." | is.na(ssb_tbl$NAstatus)), ]
+
     }
     # Gi beskjed dersom det ikke finnes en kolonne som heter "NAstatus"
     else {
