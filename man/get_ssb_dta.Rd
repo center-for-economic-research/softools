@@ -29,3 +29,17 @@ Merk: Dersom argumentet `makeNAstatus = TRUE` benyttes i PxWebApiData::ApiData (
 
 Dette betyr at tilstedeværelsen av `NAstatus`-kolonnen ikke er stabil, og brukere bør ikke forvente at den alltid er tilgjengelig i resultatet.
 }
+\examples{
+# Hent befolkningstall for kommuner i 2020 fra SSB tabell "07459"
+# (forutsetter at PxWebApiData og httr er installert og lastet)
+dta <- get_ssb_dta(
+  ssb_tbl_id = "07459",
+  aar = "2020",
+  statistikkvariabel = "Personer",
+  kommuner = c("0301", "1103", "5001")
+)
+head(dta)
+
+# Merk: Dette eksempelet forutsetter at tabell-id og variabelnavn er gyldige for valgt aar.
+
+}
