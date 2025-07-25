@@ -4,10 +4,12 @@
 \alias{search_doffin}
 \title{Retrieve tender notices from Doffin using the Doffin API}
 \usage{
-search_doffin(...)
+search_doffin(..., api_key = NULL)
 }
 \arguments{
 \item{...}{Additional parameters to be passed to the API.}
+
+\item{api_key}{Optionally, supply the API key directly. If NULL, will look for the DOFFIN_API_KEY environment variable.}
 }
 \value{
 A response object containing the search results.
@@ -16,5 +18,9 @@ A response object containing the search results.
 Retrieve tender notices from Doffin using the Doffin API
 }
 \examples{
-resp <- search_doffin()
+\dontrun{
+if (Sys.getenv("DOFFIN_API_KEY") != "") {
+  resp <- search_doffin()
+}
+}
 }

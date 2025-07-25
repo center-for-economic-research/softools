@@ -3,6 +3,7 @@
 export(get_municipality_structure)
 export(get_ssb_dta)
 export(search_doffin)
+export(set_doffin_api_key)
 importFrom(PxWebApiData,ApiData)
 importFrom(dplyr,arrange)
 importFrom(dplyr,group_by)
