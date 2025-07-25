@@ -11,7 +11,6 @@ test_that("get_ssb_dta returns NAstatus column when expected", {
   expect_true("NAstatus" %in% colnames(ssb_data))
   })
 
-
 test_that("get_ssb_dta returns a data.frame", {
   skip_on_cran() # Don't run on CRAN because it requires an internet connection
   ssb_data <- get_ssb_dta(
