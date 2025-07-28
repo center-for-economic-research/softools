@@ -89,6 +89,11 @@ get_municipality_structure <- function(
 
   # Get code and validity date
   # Find the first and last date for each code
+  # TODO: keep the last valid muni name over the period
+  # TODO: Take into account that the valid_to date does not include the date
+  # Altså ikke gyldig til og med.
+  # Trondheim 1601 er gydlig til 2018-01-01, men kommunenummeret opphørte i 2018
+  # Altså er 2017 riktig to date.
   klass_muni <- klass_muni |>
     dplyr::group_by(.data$code) |>
     dplyr::summarise(
