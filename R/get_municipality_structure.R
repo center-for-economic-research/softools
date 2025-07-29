@@ -10,13 +10,14 @@
 #'
 #' @return A data frame with columns:
 #'   \describe{
-#'     \item{code}{Municipality code}
+#'     \item{code}{Municipality code, four digit number}
 #'     \item{valid_from}{Start date of validity period}
-#'     \item{valid_to}{End date of validity period}
+#'     \item{valid_to}{End date of validity period. Excludes the date itself, meaning that the code is not valid on the returned date}
+#'     \item{name}{Last valid name associated with ID}
 #'   }
 #'
 #' @details
-#' The function uses Statistics Norway's classification code 131 for municipality
+#' The function uses Statistics Norway's classification code 131 to retrieve municipality
 #' structure. It focuses on municipality codes rather than names, as codes are
 #' the primary identifier. Name changes (e.g., addition of Sami names) do not
 #' affect the municipality code.
@@ -30,7 +31,10 @@
 #' get_municipality_structure(2020)
 #'
 #' # Get structure for a period
-#' get_municipality_structure(2018, 2022)
+#' # Note: Trondheim 1601 will have valid to date of 2018-01-01,
+#' # but the code ceased to exist on this date 2018
+#' get_municipality_structure(2017, 2022)
+#'
 #' }
 #'
 #' @export
@@ -89,16 +93,15 @@ get_municipality_structure <- function(
 
   # Get code and validity date
   # Find the first and last date for each code
-  # TODO: keep the last valid muni name over the period
-  # TODO: Take into account that the valid_to date does not include the date
-  # Altså ikke gyldig til og med.
-  # Trondheim 1601 er gydlig til 2018-01-01, men kommunenummeret opphørte i 2018
-  # Altså er 2017 riktig to date.
+  # I do this to get one code by municipality, disregarding name changes
   klass_muni <- klass_muni |>
     dplyr::group_by(.data$code) |>
     dplyr::summarise(
       valid_from = min(.data$validFromInRequestedRange, na.rm = TRUE),
       valid_to = max(.data$validToInRequestedRange, na.rm = TRUE),
+      # Get the last valid name
+      # This is not used, but can be useful for future reference
+      name = dplyr::last(.data$name, order_by = .data$validToInRequestedRange),
       .groups = "drop"
     ) |>
     dplyr::arrange(.data$code)

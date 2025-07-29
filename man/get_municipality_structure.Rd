@@ -19,9 +19,10 @@ Must be a four-digit year and greater than or equal to start_year.}
 \value{
 A data frame with columns:
   \describe{
-    \item{code}{Municipality code}
+    \item{code}{Municipality code, four digit number}
     \item{valid_from}{Start date of validity period}
-    \item{valid_to}{End date of validity period}
+    \item{valid_to}{End date of validity period. Excludes the date itself, meaning that the code is not valid on the returned date}
+    \item{name}{Last valid name associated with ID}
   }
 }
 \description{
@@ -29,7 +30,7 @@ This function retrieves municipality codes and their validity periods from
 Statistics Norway's classification system for a specified time range.
 }
 \details{
-The function uses Statistics Norway's classification code 131 for municipality
+The function uses Statistics Norway's classification code 131 to retrieve municipality
 structure. It focuses on municipality codes rather than names, as codes are
 the primary identifier. Name changes (e.g., addition of Sami names) do not
 affect the municipality code.
@@ -43,7 +44,10 @@ get_municipality_structure()
 get_municipality_structure(2020)
 
 # Get structure for a period
-get_municipality_structure(2018, 2022)
+# Note: Trondheim 1601 will have valid to date of 2018-01-01,
+# but the code ceased to exist on this date 2018
+get_municipality_structure(2017, 2022)
+
 }
 
 }
