@@ -68,7 +68,10 @@ get_municipality_structure <- function(
 
   # Set dates - municipality structure is always valid from January 1st of the year
   start_date <- paste0(start_year, "-01-01")
-  end_date <- paste0(end_year, "-01-01")
+  # Until the end of the year
+  # Note that get_klass will return a valid to date which is one day later than
+  # the specified end date.
+  end_date <- paste0(end_year, "-12-31")
 
   periode <- c(start_date, end_date)
 
