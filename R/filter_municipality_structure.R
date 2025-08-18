@@ -4,7 +4,7 @@
 #' The function checks if the municipality is valid for the entire year of observation, i.e.,
 #' the municipality's validity period must cover the full calendar year for a row to be retained.
 #'
-#' @param data A data frame with two columns: `code` (municipality ID as character) and `year` (numeric or integer). The function assumes each row represents the entire calendar year.
+#' @param data A data frame with municipality observations per year. Must contain a column for municipality ID (Four numbers in character fromat) and the year of observervation (numeric or integer). The function assumes that the observation is recorded at the end of the calendar year.
 #' @param municipality_structure Optional. A data frame with columns: `code`, `valid_from`, and `valid_to`. If not supplied, the function will call `get_municipality_structure()` to retrieve the structure for the period covering the years in `data`.
 #' @param code_col Name of the column in `data` containing municipality IDs (character). Default: "code".
 #' @param year_col Name of the column in `data` containing years (numeric/integer). Default: "year".
