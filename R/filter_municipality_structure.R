@@ -6,6 +6,8 @@
 #'
 #' @param data A data frame with two columns: `code` (municipality ID as character) and `year` (numeric or integer). The function assumes each row represents the entire calendar year.
 #' @param municipality_structure Optional. A data frame with columns: `code`, `valid_from`, and `valid_to`. If not supplied, the function will call `get_municipality_structure()` to retrieve the structure for the period covering the years in `data`.
+#' @param code_col Name of the column in `data` containing municipality IDs (character). Default: "code".
+#' @param year_col Name of the column in `data` containing years (numeric/integer). Default: "year".
 #'
 #' @return A filtered data frame containing only valid municipality-year combinations.
 #'
@@ -34,14 +36,21 @@
 #' }
 #'
 #' @export
-# TODO: Add arguments to specify year and code variables
-# Makes it easier to use with other data sources
-filter_municipality_structure <- function(data, municipality_structure) {
-  # TODO: add input validation for data
+
+filter_municipality_structure <- function(data, municipality_structure,
+                                         code_col = "code", year_col = "year") {
+  # Input validation
+  if (!code_col %in% colnames(data)) {
+    stop(sprintf("Column '%s' not found in data.", code_col))
+  }
+  if (!year_col %in% colnames(data)) {
+    stop(sprintf("Column '%s' not found in data.", year_col))
+  }
+
   # Check if municipality_structure is provided, if not, fetch it
   if (missing(municipality_structure)) {
-    start_year <- min(data$year)
-    end_year <- max(data$year)
+    start_year <- min(data[[year_col]], na.rm = TRUE)
+    end_year <- max(data[[year_col]], na.rm = TRUE)
     municipality_structure <- get_municipality_structure(start_year, end_year)
   }
 
@@ -51,8 +60,15 @@ filter_municipality_structure <- function(data, municipality_structure) {
     stop("municipality_structure must contain 'code', 'valid_from', and 'valid_to' columns.")
   }
 
+  # Prepare data for merging
+  data_for_merge <- data.frame(
+    code = as.character(data[[code_col]]),
+    year = as.integer(data[[year_col]]),
+    stringsAsFactors = FALSE
+  )
+
   # Merge data with municipality structure
-  merged <- merge(data, municipality_structure, by = "code")
+  merged <- merge(data_for_merge, municipality_structure, by = "code")
   # Ensure valid_from and valid_to are in Date format
   merged$valid_from <- as.Date(merged$valid_from)
   merged$valid_to <- as.Date(merged$valid_to)

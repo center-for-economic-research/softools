@@ -4,22 +4,32 @@
 \alias{filter_municipality_structure}
 \title{Filter Municipality-Year Combinations by Validity}
 \usage{
-filter_municipality_structure(data, municipality_structure)
+filter_municipality_structure(
+  data,
+  municipality_structure,
+  code_col = "code",
+  year_col = "year"
+)
 }
 \arguments{
-\item{data}{A data frame with two columns: `code` (municipality ID as character) and `year` (numeric or integer).}
+\item{data}{A data frame with two columns: `code` (municipality ID as character) and `year` (numeric or integer). The function assumes each row represents the entire calendar year.}
 
 \item{municipality_structure}{Optional. A data frame with columns: `code`, `valid_from`, and `valid_to`. If not supplied, the function will call `get_municipality_structure()` to retrieve the structure for the period covering the years in `data`.}
+
+\item{code_col}{Name of the column in `data` containing municipality IDs (character). Default: "code".}
+
+\item{year_col}{Name of the column in `data` containing years (numeric/integer). Default: "year".}
 }
 \value{
 A filtered data frame containing only valid municipality-year combinations.
 }
 \description{
 Removes municipality-year combinations that are not valid according to the official SSB municipality structure.
+The function checks if the municipality is valid for the entire year of observation, i.e.,
+the municipality's validity period must cover the full calendar year for a row to be retained.
 }
 \details{
-This function checks each municipality code against the validity period defined in the `municipality_structure` data frame. If a municipality code is not valid for the specified year, it will be removed from the output.
-Also drops municipality codes that are not present in the `municipality_structure`.
+This function checks each municipality code against the validity period defined in the `municipality_structure` data frame. For a municipality-year combination to be retained, the municipality must be valid for the entire year (from January 1st to December 31st of the given year). Also drops municipality codes that are not present in the `municipality_structure`.
 }
 \examples{
 \dontrun{
