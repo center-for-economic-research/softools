@@ -81,32 +81,6 @@ get_ssb_dta <-
     ssb_tbl <-
       do.call(PxWebApiData::ApiData, api_call)
 
-    # Fjern observasjoner der NAstatus er lik "."
-    # Statuskoder er ikke dokumentert i funksjon, men jeg antar at koden "." betyr
-    # at det ikke finnes observasjon for den enheten
-    # Alle kommuner som ikke var gyldige for det aktuelle aaret har denne koden
-    # Disse radene er ikke relevante for analyse og kan trygt fjernes.
-    # Andre koder for NAstatus (".." og ":") beholdes, da de representerer reelle manglende verdier
-    # (f.eks. ikke rapportert eller konfidensialitet), og kan vaere interessante for videre analyse.
-    # Se SSB API-dokumentasjon, side 12:
-    # https://www.ssb.no/api/pxwebapi/_/attachment/inline/019c05e0-35ad-4757-87a0-ba7fbf4a68e2:6c3de280a04d2ec9d9532c07f39a60131cbd2b09/Api_brukerveiledning.pdf
-
-    # TODO: OBS noen tabeller vil gi null for kommuner som ikke eksisterer i det aktuelle aaret
-    # Se for eksempel tabell 07459 for 2020, der Hvaler (3011) ikke eksisterte
-    # I dette tilfellet vil funksjonen ikke fjerne ugyldige kommunennumer-ar
-    # kombinasjoner
-    # Men vil gi beskjed om at den ikke fant NAstatus kolonne
-    # Bor legge inn sjekk av kommunesruktur i funksjon
-
-    # Sjekk forst at det finnes en kolonne som heter "NAstatus"
-    # Fjern kun rader der NAstatus er lik "." (behold NA og andre koder)
-    if ("NAstatus" %in% colnames(ssb_tbl)) {
-      ssb_tbl <- ssb_tbl[is.na(ssb_tbl$NAstatus) | ssb_tbl$NAstatus != ".", ]
-    }
-    # Gi beskjed dersom det ikke finnes en kolonne som heter "NAstatus"
-    else {
-      message("Ingen kolonne 'NAstatus' funnet i tabellen. Ingen rader fjernet basert paa NAstatus = .")
-    }
     # Fjern variabelen "ContentsCode"
     # metadata for statistikkvariabel
     ssb_tbl <-
