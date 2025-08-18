@@ -8,11 +8,12 @@ test_that("filter_municipality_structure retains all original columns and adds n
     stringsAsFactors = FALSE
   )
 
-  # Example municipality structure
+  # Example municipality structure with extra column
   muni_struct <- data.frame(
     code = c("0301", "1601", "3001", "3002"),
     valid_from = c("1900-01-01", "1900-01-01", "1900-01-01", "2020-01-01"),
     valid_to = c("2100-01-01", "2017-12-31", "2100-01-01", "2021-12-31"),
+    name = c("Oslo", "Trondheim", "Halden", "Moss"),
     stringsAsFactors = FALSE
   )
 

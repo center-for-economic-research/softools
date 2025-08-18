@@ -2,6 +2,7 @@
 #'
 #' Denne funksjonen laster ned data fra Statistisk sentralbyrå (SSB) via deres API.
 #' Funksjonen er laget for å hente data for kommuner.
+#' Dokumentasjon om API finnes her: https://www.ssb.no/api/api-mot-statistikkbanken--brukerveiledning
 #'
 #' @param ssb_tbl_id Character. ID for tabellen som skal hentes fra SSB.
 #' @param aar Character. Ett eller flere årstall som data skal hentes for.

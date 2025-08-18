@@ -73,9 +73,8 @@ filter_municipality_structure <- function(data, municipality_structure,
   keep <- merged$valid_from <= year_start & merged$valid_to > year_end
   valid <- merged[keep, , drop = FALSE]
 
-  # Remove unnecessary columns
-  valid$valid_from <- NULL
-  valid$valid_to <- NULL
+  # Keep only columns from the original input data
+  valid <- valid[, colnames(data), drop = FALSE]
 
   return(valid)
 }
