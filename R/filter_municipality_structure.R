@@ -60,22 +60,14 @@ filter_municipality_structure <- function(data, municipality_structure,
     stop("municipality_structure must contain 'code', 'valid_from', and 'valid_to' columns.")
   }
 
-  # Prepare data for merging
-  data_for_merge <- data.frame(
-    code = as.character(data[[code_col]]),
-    year = as.integer(data[[year_col]]),
-    stringsAsFactors = FALSE
-  )
-
-  # Merge data with municipality structure
-  merged <- merge(data_for_merge, municipality_structure, by = "code")
-  # Ensure valid_from and valid_to are in Date format
+  # Merge directly using code_col and 'code'
+  merged <- merge(data, municipality_structure, by.x = code_col, by.y = "code")
   merged$valid_from <- as.Date(merged$valid_from)
   merged$valid_to <- as.Date(merged$valid_to)
 
   # Calculate start and end date for each year observation
-  year_start <- as.Date(paste0(merged$year, "-01-01"))
-  year_end   <- as.Date(paste0(merged$year, "-12-31"))
+  year_start <- as.Date(paste0(merged[[year_col]], "-01-01"))
+  year_end   <- as.Date(paste0(merged[[year_col]], "-12-31"))
 
   # Keep only rows where the municipality is valid for the entire year
   keep <- merged$valid_from <= year_start & merged$valid_to > year_end

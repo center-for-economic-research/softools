@@ -12,7 +12,7 @@ filter_municipality_structure(
 )
 }
 \arguments{
-\item{data}{A data frame with two columns: `code` (municipality ID as character) and `year` (numeric or integer). The function assumes each row represents the entire calendar year.}
+\item{data}{A data frame with municipality observations per year. Must contain a column for municipality ID (Four numbers in character fromat) and the year of observervation (numeric or integer). The function assumes that the observation is recorded at the end of the calendar year.}
 
 \item{municipality_structure}{Optional. A data frame with columns: `code`, `valid_from`, and `valid_to`. If not supplied, the function will call `get_municipality_structure()` to retrieve the structure for the period covering the years in `data`.}
 
