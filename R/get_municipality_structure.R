@@ -12,8 +12,8 @@
 #' @return A data frame with columns:
 #'   \describe{
 #'     \item{code}{Municipality code, four digit number}
-#'     \item{valid_from}{Start date of validity period}
-#'     \item{valid_to}{End date of validity period. Excludes the date itself, meaning that the code is not valid on the returned date}
+#'     \item{validFromInRequestedRange}{Start date of validity period withing specified time range}
+#'     \item{validToInRequestedRange}{End date of validity within specified time range. Excludes the date itself, meaning that the code is not necessarily valid on the returned date}
 #'     \item{name}{Last valid name associated with ID}
 #'   }
 #'
@@ -77,10 +77,12 @@ get_municipality_structure <- function(
   periode <- c(start_date, end_date)
 
   # Get classification of municipalities for the given period
-  # Code 131 is the Statistics Norway code for municipality structure
-
   klass_muni <- tryCatch(
-    klassR::get_klass(131, date = periode),
+    klassR::get_klass(
+      # Classification number for municipalities
+      131,
+      date = periode
+    ),
     error = function(e) {
       stop("Error fetching municipality structure from klassR: ", e$message)
     }
@@ -105,16 +107,15 @@ get_municipality_structure <- function(
   # Find the first and last date for each code
   # I do this to get one code by municipality, disregarding name changes
   klass_muni <- klass_muni |>
+    dplyr::arrange(.data$code, .data$validToInRequestedRange) |>
     dplyr::group_by(.data$code) |>
     dplyr::summarise(
-      valid_from = min(.data$validFromInRequestedRange, na.rm = TRUE),
-      valid_to = max(.data$validToInRequestedRange, na.rm = TRUE),
-      # Get the last valid name
-      # This is not used, but can be useful for future reference
-      name = dplyr::last(.data$name, order_by = .data$validToInRequestedRange),
+      validFromInRequestedRange = min(.data$validFromInRequestedRange, na.rm = TRUE),
+      validToInRequestedRange = max(.data$validToInRequestedRange, na.rm = TRUE),
+      # Get the last valid name (last row after sorting by validToInRequestedRange)
+      name = dplyr::last(.data$name),
       .groups = "drop"
-    ) |>
-    dplyr::arrange(.data$code)
+    )
 
   return(klass_muni)
 }
