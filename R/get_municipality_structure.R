@@ -1,7 +1,8 @@
 #' Get municipality codes and validity dates for a given period
 #'
 #' This function retrieves municipality codes and their validity periods from
-#' Statistics Norway's classification system for a specified time range.
+#' Statistics Norway's classification system for a specified time range. If no
+#' years are provided, it defaults to the current year.
 #'
 #' @param start_year Numeric. First year to include (default: current year).
 #'   Must be a four-digit year.
@@ -39,7 +40,7 @@
 #'
 #' @export
 #' @importFrom klassR get_klass
-#' @importFrom dplyr group_by summarise arrange
+#' @importFrom dplyr group_by summarise arrange filter
 #' @importFrom rlang .data
 get_municipality_structure <- function(
     start_year = as.numeric(format(Sys.Date(), "%Y")),
@@ -77,7 +78,13 @@ get_municipality_structure <- function(
 
   # Get classification of municipalities for the given period
   # Code 131 is the Statistics Norway code for municipality structure
-  klass_muni <- klassR::get_klass(131, date = periode)
+
+  klass_muni <- tryCatch(
+    klassR::get_klass(131, date = periode),
+    error = function(e) {
+      stop("Error fetching municipality structure from klassR: ", e$message)
+    }
+  )
 
   # Fjern kode for uoppgitt kommune
   klass_muni <- klass_muni |>
