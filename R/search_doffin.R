@@ -38,8 +38,16 @@ get_doffin_api_key <- function(api_key = NULL) {
   stop("No API key found. Please supply it with the `api_key` argument or set the DOFFIN_API_KEY environment variable.")
 }
 
-##' Retrieve tender notices from Doffin using the Doffin API
-#'
+##' Retrieve tender notices from Doffin using the Doffin API.
+##' @section API Key Setup:
+##' This function requires a Doffin API key. Set it using one of these methods:
+##' \itemize{
+##'   \item Store in `.Renviron`: `DOFFIN_API_KEY=your-key` (recommended)
+##'   \item Interactive setup: `set_doffin_api_key()`
+##'   \item Direct argument: `search_doffin(api_key = "your-key")`
+##' }
+##'
+##' A key can be obtained by registering at the Doffin API portal: \url{https://dof-notices-dev-api.developer.azure-api.net/}.
 #' @param ... Additional parameters to be passed to the API.
 #' @param api_key Optionally, supply the API key directly. If NULL, will look for the DOFFIN_API_KEY environment variable.
 #'
@@ -53,7 +61,7 @@ get_doffin_api_key <- function(api_key = NULL) {
 #' }
 #' }
 search_doffin <- function(..., api_key = NULL) {
-  # Base-url for Doffin notices seach API
+  # Base-url for Doffin notices search API
   doffin_search_base_url <- "https://betaapi.doffin.no/public/v2/search?"
 
   # Get API key
