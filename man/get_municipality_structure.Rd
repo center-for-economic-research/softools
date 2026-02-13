@@ -20,14 +20,15 @@ Must be a four-digit year and greater than or equal to start_year.}
 A data frame with columns:
   \describe{
     \item{code}{Municipality code, four digit number}
-    \item{valid_from}{Start date of validity period}
-    \item{valid_to}{End date of validity period. Excludes the date itself, meaning that the code is not valid on the returned date}
+    \item{validFromInRequestedRange}{Start date of validity period withing specified time range}
+    \item{validToInRequestedRange}{End date of validity within specified time range. Excludes the date itself, meaning that the code is not necessarily valid on the returned date}
     \item{name}{Last valid name associated with ID}
   }
 }
 \description{
 This function retrieves municipality codes and their validity periods from
-Statistics Norway's classification system for a specified time range.
+Statistics Norway's classification system for a specified time range. If no
+years are provided, it defaults to the current year.
 }
 \details{
 The function uses Statistics Norway's classification code 131 to retrieve municipality
