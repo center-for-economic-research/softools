@@ -34,6 +34,9 @@
 #' # Merk: Dette eksempelet forutsetter at tabell-id og variabelnavn er gyldige for valgt aar.
 #'
 #' @export
+# TODO: Legg inn sjekk av API limit, man kan maks få 800,000 dataceller.
+# Antall spørringer er for tiden 30 per minutt.
+# Eventuelt hør med utviklere av pakken om det er mulig å få informasjon om dette i API-responsen, slik at jeg kan legge inn en sjekk i funksjonen.
 get_ssb_dta <-
   function(ssb_tbl_id,
            aar, # Enkelt år eller vektor med alle ønskede år, må være character
