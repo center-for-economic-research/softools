@@ -20,8 +20,8 @@ Must be a four-digit year and greater than or equal to start_year.}
 A data frame with columns:
   \describe{
     \item{code}{Municipality code, four digit number}
-    \item{validFromInRequestedRange}{Start date of validity period withing specified time range}
-    \item{validToInRequestedRange}{End date of validity within specified time range. Excludes the date itself, meaning that the code is not necessarily valid on the returned date}
+    \item{valid_from}{Start date of validity period within specified time range}
+    \item{valid_to}{End date of validity within specified time range. Excludes the date itself, meaning that the code is not necessarily valid on the returned date}
     \item{name}{Last valid name associated with ID}
   }
 }
