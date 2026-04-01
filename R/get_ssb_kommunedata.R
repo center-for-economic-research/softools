@@ -37,6 +37,7 @@
 # TODO: Legg inn sjekk av API limit, man kan maks få 800,000 dataceller.
 # Antall spørringer er for tiden 30 per minutt.
 # Eventuelt hør med utviklere av pakken om det er mulig å få informasjon om dette i API-responsen, slik at jeg kan legge inn en sjekk i funksjonen.
+# Har laget issue for query limit på 2100 tegn for nye funksjoner for v2
 get_ssb_dta <-
   function(ssb_tbl_id,
            aar, # Enkelt år eller vektor med alle ønskede år, må være character
@@ -81,6 +82,9 @@ get_ssb_dta <-
     }
 
     # Send API call og hent data
+    # TODO: bruk nye funksjoner for v2 for å håndtere API-kall
+    # Ny funksjon heter api_data()
+    # TODO: Test hva responsen er om responsen er stor, eller URL er for lang, og legg inn sjekk for dette
     ssb_tbl <-
       do.call(PxWebApiData::ApiData, api_call)
 
