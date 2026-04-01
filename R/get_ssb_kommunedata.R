@@ -63,6 +63,8 @@ get_ssb_dta <-
     # TODO: legg inn sjekk for at API call er gyldig. Tror dette kan
     # Gjøres på flere måter, men en start er å sjekke om tabell finnes,
     # Sjekke om årene finnes i tabell etc...
+    # Tror at noen sjekker gjøres av funksjonen ApiData allerede
+    # Test ut feilmeldinger fra denne først. 
     api_call <-
       list(
         ssb_tbl_id,
